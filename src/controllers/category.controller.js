@@ -7,7 +7,14 @@ export const createCategory = async (req, res) => {
         if(categoryExists){
             return res.status(400).json({ message: 'Kategoria me kete emer ekziston!' });
         }
-        const category = await Category.create({name,type,color});
+        const totalCategories = await Category.countDocuments();
+        const nextId = totalCategories + 1;
+        const category = await Category.create({
+            _id: nextId,
+            name,
+            type,
+            color
+        });
         res.status(201).json({
             message: 'Kategoria u krijua me sukses!',
             category

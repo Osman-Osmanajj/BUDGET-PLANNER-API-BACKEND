@@ -6,7 +6,11 @@ export const registerUser = async (req, res) => {
         if (userExists) {
             return res.status(400).json({ message: 'Ky email është i regjistruar paraprakisht!' });
         }
+
+        const totalUsers = await User.countDocuments();
+        const nextId = totalUsers + 1;
         const user = await User.create({
+            _id: nextId,
             name,
             email,
             password 

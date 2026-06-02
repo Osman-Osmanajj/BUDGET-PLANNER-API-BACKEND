@@ -6,7 +6,15 @@ export const createAccount = async (req,res) => {
         if(accountExists){
             return res.status(400).json({ message: 'Llogaria me kete emer ekziston per kete perdorues!' });
         }
-        const account = await Account.create({user,name,type,balance});
+        const totalAccounts = await Account.countDocuments();
+        const nextId = totalAccounts + 1;
+        const account = await Account.create({
+            _id: nextId,
+            user,
+            name,
+            type,
+            balance
+        });
         res.status(201).json({
             message: 'Llogaria u krijua me sukses!',
             account

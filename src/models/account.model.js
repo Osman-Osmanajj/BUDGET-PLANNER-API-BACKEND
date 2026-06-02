@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
 
 const accountSchema = new mongoose.Schema({
+    _id:{
+        type: Number
+    },
     user:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

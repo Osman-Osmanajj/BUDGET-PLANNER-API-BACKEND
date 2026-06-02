@@ -1,5 +1,8 @@
 import mongoose, { trusted } from 'mongoose';
 const categorySchema = new mongoose.Schema({
+    _id:{
+        type:Number
+    },
     name:{
         type: String,
         required: [true,'Ju lutem vendosni emrin e kategorisë'],

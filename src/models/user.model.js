@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
+    _id:{
+        type:Number
+
+    },
     name:{
         type: String,
         required: [true,'Ju lutem vendosni emrin tuaj'],
