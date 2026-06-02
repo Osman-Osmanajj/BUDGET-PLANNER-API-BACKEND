@@ -75,7 +75,7 @@ export const updateBudget = async (req, res) => {
 export const deleteBudget = async (req, res) => {
     try {
         const budget = await Budget.findOneAndDelete({ _id: req.params.id, user: req.user._id });
-        if(result.deletedCount === 0){
+        if(!budget){
             return res.status(404).json({ message: 'Buxheti nuk u gjet!' });
         }
         res.status(200).json({ message: 'Buxheti u fshi me sukses!' });

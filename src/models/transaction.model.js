@@ -5,17 +5,17 @@ const transactionSchema = new mongoose.Schema({
         type: Number
     },
     user: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Number,
         ref: 'User',
         required: [true, 'Transaksioni duhet t\'i takojë një përdoruesi']
     },
     account: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Number,
         ref: 'Account', 
         required: [true, 'Ju lutem përcaktoni llojin e llogarisë']
     },
     category: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Number,
         ref: 'Category', 
         required: [true, 'Ju lutem përcaktoni kategorinë']
     },

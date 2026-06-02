@@ -5,7 +5,7 @@ const accountSchema = new mongoose.Schema({
         type: Number
     },
     user:{
-        type: mongoose.Schema.Types.ObjectId,
+        type: Number,
         ref: 'User',
         required: [true, 'Llogaria duhet ti takoje një përdoruesi']
     },
@@ -17,13 +17,13 @@ const accountSchema = new mongoose.Schema({
     type:{
         type: String,
         required: true,
-        enum: ['cash', 'bank', 'credit_card', 'other'],
+        enum: ['cash', 'bank', 'credit_card','checking', 'other'],
         default: 'cash'
     },
     balance:{
         type: Number,
         required: [true, 'Ju lutem jepni balancen fillestare të llogarisë'],
-        defaulft : 0
+        default : 0
     },
 },{
     timestamps: true
