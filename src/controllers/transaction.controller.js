@@ -3,12 +3,12 @@ import Account from '../models/account.model.js';
 
 export const createTransaction = async (req, res) => {
     try {
-        const { user, account, category, amount, type, description, date } = req.body;
+        const { account, category, amount, type, description, date } = req.body;
+        const user = req.user._id;
 
-
-        const accountDoc = await Account.findById(account);
+        const accountDoc = await Account.findOne({ _id: account, user: user });
         if (!accountDoc) {
-            return res.status(404).json({ message: 'Llogaria nuk u gjet!' });
+            return res.status(404).json({ message: 'Llogaria nuk u gjet ose nuk ju takon juve!' });
         }
         const totalTransactions = await Transaction.countDocuments();
         const nextId = totalTransactions + 1;
@@ -16,9 +16,9 @@ export const createTransaction = async (req, res) => {
             _id: nextId,
             user, account, category, amount, type, description, date
         });
-        if (type === 'income') {
+        if (type.toLowerCase() === 'income') {
             accountDoc.balance += Number(amount);
-        } else if (type === 'expense') {
+        } else if (type.toLowerCase() === 'expense') {
             accountDoc.balance -= Number(amount);
         }
 
@@ -36,7 +36,7 @@ export const createTransaction = async (req, res) => {
 
 export const getTransactions = async (req, res) => {
     try {
-        const transactions = await Transaction.find({ user: req.params.userId })
+        const transactions = await Transaction.find({ user: req.user._id })
             .populate('category', 'name type')
             .populate('account', 'name type')
             .sort({ date: -1 }); 

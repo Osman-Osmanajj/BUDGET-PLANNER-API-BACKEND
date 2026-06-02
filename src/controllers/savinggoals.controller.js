@@ -2,7 +2,8 @@ import SavingGoal from '../models/savinggoals.models.js';
 
 export const createSavingGoal = async (req, res) => {
     try {
-        const { user, name, targetAmount, currentAmount, dueDate } = req.body;
+        const { name, targetAmount, currentAmount, dueDate } = req.body;
+        const user = req.user._id;
         const totalGoals = await SavingGoal.countDocuments();
         const nextId = totalGoals + 1;
 
@@ -11,7 +12,7 @@ export const createSavingGoal = async (req, res) => {
             user,
             name,
             targetAmount,
-            currentAmount,
+            currentAmount: currentAmount || 0,
             dueDate
         });
 
@@ -25,7 +26,7 @@ export const createSavingGoal = async (req, res) => {
 };
 export const getSavingGoals = async (req, res) => {
     try {
-        const goals = await SavingGoal.find({ user: Number(req.params.userId) });
+        const goals = await SavingGoal.find({ user: req.user._id });
         res.status(200).json(goals);
     } catch (error) {
         res.status(500).json({ message: 'Gabim në server', error: error.message });
