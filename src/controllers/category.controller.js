@@ -13,7 +13,8 @@ export const createCategory = async (req, res) => {
             _id: nextId,
             name,
             type,
-            color
+            color,
+            user:req.user._id
         });
         res.status(201).json({
             message: 'Kategoria u krijua me sukses!',
