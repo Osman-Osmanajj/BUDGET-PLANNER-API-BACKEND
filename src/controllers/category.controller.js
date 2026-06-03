@@ -30,4 +30,40 @@ export const getCategories = async (req, res) => {
     }catch(error){
         res.status(500).json({ message: 'Gabim ne server', error: error.message });
     }
-}
+};
+export const getCategoryById = async (req, res) => {
+    try {
+        const category = await Category.findOne({ _id: req.params.id, user: req.user._id });
+        if (!category) return res.status(404).json({ message: 'Kategoria nuk u gjet!' });
+        res.status(200).json(category);
+    } catch (error) {
+        res.status(500).json({ message: 'Gabim ne server', error: error.message });
+    }
+};
+
+export const updateCategory = async (req, res) => {
+    try {
+        const { name, type, color } = req.body;
+        const category = await Category.findOne({ _id: req.params.id, user: req.user._id });
+        if (!category) return res.status(404).json({ message: 'Kategoria nuk u gjet!' });
+
+        category.name = name || category.name;
+        category.type = type || category.type;
+        category.color = color || category.color;
+
+        await category.save();
+        res.status(200).json({ message: 'Kategoria u përditësua!', category });
+    } catch (error) {
+        res.status(500).json({ message: 'Gabim ne server', error: error.message });
+    }
+};
+
+export const deleteCategory = async (req, res) => {
+    try {
+        const category = await Category.findOneAndDelete({ _id: req.params.id, user: req.user._id });
+        if (!category) return res.status(404).json({ message: 'Kategoria nuk u gjet!' });
+        res.status(200).json({ message: 'Kategoria u fshi me sukses!' });
+    } catch (error) {
+        res.status(500).json({ message: 'Gabim në server', error: error.message });
+    }
+};

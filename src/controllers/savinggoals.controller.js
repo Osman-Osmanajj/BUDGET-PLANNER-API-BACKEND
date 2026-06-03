@@ -3,13 +3,17 @@ import SavingGoal from '../models/savinggoals.models.js';
 export const createSavingGoal = async (req, res) => {
     try {
         const { name, targetAmount, currentAmount, dueDate } = req.body;
-        const user = req.user._id;
-        const totalGoals = await SavingGoal.countDocuments();
-        const nextId = totalGoals + 1;
+        const userId = req.user._id;
+        const goalExists = await SavingGoal.findOne({ user: userId, name });
+        if (goalExists) {
+            return res.status(400).json({ message: 'Objektivi i kursimit me kete emer ekziston per kete perdorues!' });
+        }
+        const lastGoal = await SavingGoal.findOne().sort({ _id: -1 });
+        const nextId = lastGoal ? lastGoal._id + 1 : 1;
 
         const savingGoal = await SavingGoal.create({
             _id: nextId,
-            user,
+            user: userId,
             name,
             targetAmount,
             currentAmount: currentAmount || 0,
@@ -69,11 +73,9 @@ export const updateSavingGoal = async (req, res) => {
 
 export const deleteSavingGoal = async (req,res) =>{
     try{
-        const result = await SavingGoal.deleteOne({ _id: req.params.id, user: req.user._id });
+        const goal = await SavingGoal.findOneAndDelete({ _id: req.params.id, user: req.user._id });
 
-        if(result.deletedCount === 0){
-            return res.status(404).json({ message: 'Objektivi i kursimit nuk u gjet!' });
-        }
+        if (!goal) return res.status(404).json({ message: 'Objektivi i kursimit nuk u gjet!' });
         res.status(200).json({ message: 'Objektivi i kursimit u fshi me sukses!' });
     } catch (error) {
         res.status(500).json({ message: 'Gabim në server', error: error.message });

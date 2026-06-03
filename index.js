@@ -7,6 +7,7 @@ import accountRoutes from './src/routes/account.routes.js';
 import transactionRoutes from './src/routes/transaction.routes.js';
 import budgetRoutes from './src/routes/budget.routes.js';
 import savingGoalRoutes from './src/routes/savinggoal.routes.js';
+import { errorHandler, notFound } from './src/middleware/errorHandler.js';
 
 dotenv.config();
 
@@ -22,6 +23,9 @@ app.use('/api/saving-goals', savingGoalRoutes);
 app.get('/', (req, res) => {
     res.send('Budget Planing API po funksionon me sukses');
 });
+
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 connectDB().then(() => {

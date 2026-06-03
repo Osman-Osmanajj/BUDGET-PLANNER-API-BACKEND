@@ -1,5 +1,5 @@
 import express from 'express';
-import {registerUser, loginUser, getMe} from '../controllers/user.controller.js';
+import {registerUser, loginUser, getMe, updateMe} from '../controllers/user.controller.js';
 import { protect} from '../middleware/authentication.js';
 
 const router = express.Router();
@@ -7,5 +7,7 @@ const router = express.Router();
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.get('/me', protect, getMe);
+router.put('/me',protect,updateMe);
+
 
 export default router;
